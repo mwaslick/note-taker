@@ -7,7 +7,7 @@ const fs = require("fs")
 // Sets up the Express App
 // =============================================================
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
@@ -52,11 +52,14 @@ app.post("/api/notes", function(req, res) {
 app.delete("/api/notes/:id", function(req, res) {
   const deletedNote = req.params.id;
 
+  console.log("Hello World", req.params.id)
+
   const newnoteData = notesData.filter(note => note.id != deletedNote);
 
   fs.writeFileSync(path.join(__dirname, "/db/db.json"), JSON.stringify(newnoteData));
 
-  res.json(newnoteData)
+  return res.json(true)
+
 })
 
 // API route for all other paths

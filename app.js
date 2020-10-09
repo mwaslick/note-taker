@@ -14,9 +14,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"))
 
-// Reads the db.JSON file and parses it for the notes data variable
-let notesData = fs.readFileSync(path.join(__dirname, "/db/db.json"), "utf-8");
-notesData = JSON.parse(notesData)
+// Function that reads the db.JSON file and parses it for the notes data variable
+const getJsonData = () => {
+  let notesData = fs.readFileSync(path.join(__dirname, "/db/db.json"), "utf-8");
+  return JSON.parse(notesData)
+}
+
 
 // HTML Route for viewing the notes code
 app.get("/notes", function(req, res) {
@@ -25,11 +28,15 @@ app.get("/notes", function(req, res) {
 
 // API route for getting the notes json file
 app.get("/api/notes", function(req, res) {
+  let notesData = getJsonData();
+
   res.json(notesData)
 });
 
 // API route for posting notes
 app.post("/api/notes", function(req, res) {
+  let notesData = getJsonData()
+
   const newNote = {
     title: req.body.title,
     text: req.body.text
@@ -45,22 +52,22 @@ app.post("/api/notes", function(req, res) {
 
   fs.writeFileSync(path.join(__dirname, "/db/db.json"), JSON.stringify(newNoteState));
 
-  res.json(notesData)
+  return res.json(true)
 })
 
 // API route for deleting notes
-app.delete("/api/notes/:id", function(req, res) {
-  const deletedNote = req.params.id;
+app.delete("/api/notes/:id", function (req, res) {
+  // Reads the db.JSON file and parses it for the notes data variable
+  let notesData = getJsonData()
 
-  console.log("Hello World", req.params.id)
+  const deletedNote = req.params.id;
 
   const newnoteData = notesData.filter(note => note.id != deletedNote);
 
   fs.writeFileSync(path.join(__dirname, "/db/db.json"), JSON.stringify(newnoteData));
-
+  
   return res.json(true)
-
-})
+});
 
 // API route for all other paths
 app.get("*", function(req,res) {

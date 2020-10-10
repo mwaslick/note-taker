@@ -31,7 +31,7 @@ Opening page of the application
 
 Page where users can enter a note 
 
-![Note taking page with a place to enter a new note, and a sidebar that says "No notes saved"](./screenshots.newnote.png)
+![Note taking page with a place to enter a new note, and a sidebar that says "No notes saved"](./screenshots/newnote.png)
 
 An example of where multiple notes have been entered
 
